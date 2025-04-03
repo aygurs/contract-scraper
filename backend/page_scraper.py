@@ -1,29 +1,8 @@
-#Request HTML page (requests library)
-#https://requests.readthedocs.io/en/latest/user/quickstart/#make-a-request
-import requests
-
-#Scrape HTML page (BeautifulSoup library)
-#https://www.crummy.com/software/BeautifulSoup/bs4/doc/
 from bs4 import BeautifulSoup
 
-#Export data collected (Pandas library)
-#https://pandas.pydata.org/docs/user_guide/index.html#user-guide
-import pandas as pd
+def scrape_page(soup, url):
 
-#Scraper function
-def scrape_page(url):
-    '''Scrape the awarded contract page for metadata'''
-
-    #Send GET request to desired webpage using requests
-    response = requests.get(url)
-
-    #Create a 'soup' object of the HTML page requested
-    #.text is a property from the requests object
-    #Using lxml as a parser for faster response times
-    soup = BeautifulSoup(response.text, "lxml")
-
-    #Create dictionary to hold contract data
-    #Add URL to contract
+    #Make contract list and add URL first
     contract = {"Contract URL": url}
 
     #Find title
@@ -74,30 +53,3 @@ def scrape_page(url):
 
             
     return contract
-
-#Save function to csv file
-def save_to_csv(data, filename="contracts.csv"):
-    '''Saves scraped contract data as a csv file'''
-    
-    #Creates a data frame using pandas (pd) and puts data into a table structure
-    contract_dataframe = pd.DataFrame(data)
-
-    #Convert to csv file, don't include index numbers in file
-    contract_dataframe.to_csv(filename, index=False)
-
-    #Prints confirmation to console
-    print(f"Saved {len(data)} contracts to {filename}")
-
-#Save function to excel file
-def save_to_excel(data, filename="contracts.xlsx"):
-    '''Saves scraped contract data as a excel file'''
-    
-    #Creates a data frame using pandas (pd) and puts data into a table structure
-    contract_dataframe = pd.DataFrame(data)
-
-    #Convert to csv file, don't include index numbers in file
-    #Pandas uses openpyxl library to create excel file
-    contract_dataframe.to_excel(filename, index=False)
-
-    #Prints confirmation to console
-    print(f"Saved {len(data)} contracts to {filename}")
